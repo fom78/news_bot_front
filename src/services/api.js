@@ -9,7 +9,7 @@ const apiClient = axios.create({
   }
 })
 
-// Interceptor para manejar JWT
+// Interceptor para incluir token
 apiClient.interceptors.request.use(config => {
   const token = localStorage.getItem('jwtToken')
   if (token) {
@@ -18,39 +18,29 @@ apiClient.interceptors.request.use(config => {
   return config
 })
 
-// Interceptor de respuestas
+// Interceptor de errores de autenticación
 apiClient.interceptors.response.use(
-  response => {
-    // Guardar token al hacer login/register
-    if (response.config.url.includes('/auth') && response.data.access_token) {
-      const { access_token, user } = response.data
-      localStorage.setItem('jwtToken', access_token)
-      localStorage.setItem('userPhone', user.phone_number)
-    }
-    return response
-  },
+  response => response,
   error => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status
+    if ([401, 403, 422].includes(status)) {
       localStorage.removeItem('jwtToken')
       localStorage.removeItem('userPhone')
-      window.location = '/login'
+      window.dispatchEvent(new Event('storage')) // Para sincronizar logout
+      window.location.href = '/login' // Redirige al login
     }
-    
-    const errorMessage = error.response?.data?.message || 
-      `Error: ${error.code || 'Connection failed'}`
-    
-    throw new Error(errorMessage)
+    return Promise.reject(error)
   }
 )
 
 export const authService = {
-  login: (phone, password) => apiClient.post('/auth/login', { phone_number:phone, password }),
-  register: (phone, password) => apiClient.post('/auth/register', { phone_number:phone, password }),
+  login: (phone, password) => apiClient.post('/auth/login', { phone_number: phone, password }),
+  register: (phone, password) => apiClient.post('/auth/register', { phone_number: phone, password }),
   verifyToken: () => apiClient.post('/auth/verify-token')
 }
 
 export const subscriptionService = {
   get: () => apiClient.get('/subscriptions').then(res => res.data.map(s => s.category)),
-  add: (category) => apiClient.post('/subscriptions', { category }),
+  add: (category) => apiClient.post('/subscriptions', { categories: category }),
   delete: (category) => apiClient.delete(`/subscriptions/${encodeURIComponent(category)}`)
 }

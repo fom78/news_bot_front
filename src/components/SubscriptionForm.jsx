@@ -1,45 +1,81 @@
 import { useState } from 'react'
 
 export default function SubscriptionForm({ availableCategories, onAdd }) {
-  const [selectedCategory, setSelectedCategory] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedSingle, setSelectedSingle] = useState('')
+  const [selectedMultiple, setSelectedMultiple] = useState([])
 
-  const handleSubmit = async (e) => {
+  const handleSingleSubmit = (e) => {
     e.preventDefault()
-    if (!selectedCategory) return
-    
-    setIsSubmitting(true)
-    try {
-      await onAdd(selectedCategory)
-      setSelectedCategory('')
-    } finally {
-      setIsSubmitting(false)
+    if (selectedSingle) {
+      onAdd([selectedSingle]) // lo enviamos como array
+      setSelectedSingle('')
+    }
+  }
+
+  const handleCheckboxChange = (category) => {
+    setSelectedMultiple(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    )
+  }
+
+  const handleMultiSubmit = (e) => {
+    e.preventDefault()
+    if (selectedMultiple.length > 0) {
+      onAdd(selectedMultiple)
+      setSelectedMultiple([])
     }
   }
 
   return (
-    <div className="bg-gray-50 p-6 rounded-lg">
-      <h3 className="text-lg font-semibold mb-4">Agregar nueva suscripción</h3>
-      <form onSubmit={handleSubmit} className="flex gap-4">
+    <div className="space-y-6">
+      {/* Agregar individualmente */}
+      <form onSubmit={handleSingleSubmit} className="flex gap-2 items-center">
         <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="flex-1 p-2 border rounded-md bg-white"
-          disabled={isSubmitting || availableCategories.length === 0}
+          value={selectedSingle}
+          onChange={e => setSelectedSingle(e.target.value)}
+          className="border px-3 py-2 rounded"
         >
           <option value="">Selecciona una categoría</option>
           {availableCategories.map(category => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
-        
         <button
           type="submit"
-          disabled={!selectedCategory || isSubmitting}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          {isSubmitting ? 'Agregando...' : 'Agregar'}
+          Agregar
         </button>
+      </form>
+
+      {/* Agregar múltiples */}
+      <form onSubmit={handleMultiSubmit}>
+        <fieldset className="border rounded p-4">
+          <legend className="font-semibold text-sm mb-2">Agregar múltiples categorías</legend>
+          <div className="space-y-2">
+            {availableCategories.map(category => (
+              <label key={category} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedMultiple.includes(category)}
+                  onChange={() => handleCheckboxChange(category)}
+                />
+                {category}
+              </label>
+            ))}
+          </div>
+          <button
+            type="submit"
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            disabled={selectedMultiple.length === 0}
+          >
+            Agregar seleccionadas
+          </button>
+        </fieldset>
       </form>
     </div>
   )

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { subscriptionService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import SubscriptionForm from './SubscriptionForm'
 
 export default function SubscriptionManager() {
   const { user } = useAuth()
   const [subscriptions, setSubscriptions] = useState([])
   const [availableCategories] = useState([
     'cultura', 'deportes', 'tecnologia', 'politica', 'economia'
-  ]) // Lista estática temporal
+  ])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -15,8 +16,9 @@ export default function SubscriptionManager() {
     try {
       const currentSubs = await subscriptionService.get()
       setSubscriptions(currentSubs)
+      setError(null)
     } catch (err) {
-      setError(err.message)
+      setError(err.response?.data?.error?.message || 'Error al cargar suscripciones')
     } finally {
       setLoading(false)
     }
@@ -27,9 +29,23 @@ export default function SubscriptionManager() {
       await subscriptionService.delete(category)
       setSubscriptions(prev => prev.filter(c => c !== category))
     } catch (err) {
-      setError(`Error eliminando: ${err.message}`)
+      setError(`Error eliminando: ${err.response?.data?.error?.message || err.message}`)
     }
   }
+
+  
+  const handleAdd = async (categories) => {
+    try {
+      await subscriptionService.add(categories)
+      setSubscriptions(prev => [...new Set([...prev, ...categories])])
+      setError(null)
+    } catch (err) {
+      console.log(err.response);
+      
+      setError(`Error agregando: ${err.response?.data?.error?.message || err.message}`)
+    }
+  }
+  
 
   useEffect(() => {
     if (user) loadData()
@@ -37,10 +53,15 @@ export default function SubscriptionManager() {
 
   if (!user) return <div>Debes iniciar sesión</div>
   if (loading) return <div>Cargando...</div>
-  if (error) return <div className="text-red-500">{error}</div>
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {error && (
+        <div className="text-red-600 p-4 border border-red-300 rounded bg-red-50">
+          {error}
+        </div>
+      )}
+
       <h2 className="text-xl font-bold">Tus Suscripciones</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -57,22 +78,10 @@ export default function SubscriptionManager() {
         ))}
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold mb-4">Categorías Disponibles</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {availableCategories
-            .filter(c => !subscriptions.includes(c))
-            .map(category => (
-              <button
-                key={category}
-                onClick={() => handleAdd(category)}
-                className="p-2 border rounded hover:bg-gray-50"
-              >
-                {category}
-              </button>
-            ))}
-        </div>
-      </div>
+      <SubscriptionForm
+        availableCategories={availableCategories.filter(c => !subscriptions.includes(c))}
+        onAdd={handleAdd}
+      />
     </div>
   )
 }

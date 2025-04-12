@@ -7,40 +7,46 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [pending, setPending] = useState(true)
 
-  const initAuth = useCallback(async () => {
-    const token = localStorage.getItem('jwtToken')
-    const phone = localStorage.getItem('userPhone')
-    
-    if (token && phone) {
-      try {
-        await authService.verifyToken()
-        setUser({ phone })
-      } catch (error) {
-        logout()
-      }
-    }
-    setPending(false)
-  }, [])
-
   const login = useCallback(async (phone, password) => {
     const response = await authService.login(phone, password)
+    localStorage.setItem('jwtToken', response.data.access_token)
+    localStorage.setItem('userPhone', response.data.user.phone_number)
     setUser({ phone: response.data.user.phone_number })
   }, [])
 
   const register = useCallback(async (phone, password) => {
     const response = await authService.register(phone, password)
-    setUser({ phone: response.data.phone_number })
+    localStorage.setItem('jwtToken', response.data.access_token)
+    localStorage.setItem('userPhone', response.data.user.phone_number)
+    setUser({ phone: response.data.user.phone_number })
   }, [])
 
   const logout = useCallback(() => {
     localStorage.removeItem('jwtToken')
     localStorage.removeItem('userPhone')
+    window.dispatchEvent(new Event('storage'))
     setUser(null)
   }, [])
 
   useEffect(() => {
-    initAuth()
-  }, [initAuth])
+    const token = localStorage.getItem('jwtToken')
+    const phone = localStorage.getItem('userPhone')
+
+    if (token && phone) {
+      setUser({ phone })
+    }
+
+    setPending(false)
+
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('jwtToken')
+      const phone = localStorage.getItem('userPhone')
+      setUser(token && phone ? { phone } : null)
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, pending, login, register, logout }}>
