@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { handleError } from '../lib/errorHandler'
 
 export default function AuthForm({ mode = 'login' }) {
   const [phone, setPhone] = useState('')
@@ -45,7 +46,17 @@ export default function AuthForm({ mode = 'login' }) {
       }
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err.message || 'Error en el servidor. Intente nuevamente.')
+      const { message, isValidationError } = handleError(err, { 
+        silent: true // Silenciar toast para errores de validación
+      })
+      
+      // Mostrar errores de validación en el formulario
+      if (isValidationError) {
+        setError(message)
+      } else {
+        // Mostrar otros errores con toast
+        handleError(err, { silent: false })
+      }
     } finally {
       setIsSubmitting(false)
     }

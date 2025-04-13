@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { subscriptionService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import SubscriptionForm from './SubscriptionForm'
+import { handleError } from '../lib/errorHandler'
 
 export default function SubscriptionManager() {
   const { user } = useAuth()
@@ -10,15 +11,13 @@ export default function SubscriptionManager() {
     'cultura', 'deportes', 'tecnologia', 'politica', 'economia'
   ])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
   const loadData = async () => {
     try {
       const currentSubs = await subscriptionService.get()
       setSubscriptions(currentSubs)
-      setError(null)
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Error al cargar suscripciones')
+      handleError(err, { id: 'load-subs' })
     } finally {
       setLoading(false)
     }
@@ -29,7 +28,7 @@ export default function SubscriptionManager() {
       await subscriptionService.delete(category)
       setSubscriptions(prev => prev.filter(c => c !== category))
     } catch (err) {
-      setError(`Error eliminando: ${err.response?.data?.error?.message || err.message}`)
+      handleError(err)
     }
   }
 
@@ -38,11 +37,8 @@ export default function SubscriptionManager() {
     try {
       await subscriptionService.add(categories)
       setSubscriptions(prev => [...new Set([...prev, ...categories])])
-      setError(null)
     } catch (err) {
-      console.log(err.response);
-      
-      setError(`Error agregando: ${err.response?.data?.error?.message || err.message}`)
+      handleError(err)
     }
   }
   
@@ -56,11 +52,11 @@ export default function SubscriptionManager() {
 
   return (
     <div className="space-y-6">
-      {error && (
+      {/* {error && (
         <div className="text-red-600 p-4 border border-red-300 rounded bg-red-50">
           {error}
         </div>
-      )}
+      )} */}
 
       <h2 className="text-xl font-bold">Tus Suscripciones</h2>
       
