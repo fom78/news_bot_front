@@ -3,7 +3,7 @@ import { subscriptionService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import SubscriptionForm from './SubscriptionForm'
 import { handleError } from '../lib/errorHandler'
-import toast from 'react-hot-toast'
+import { notification } from '../lib/notificationHandler'
 
 export default function SubscriptionManager() {
   const { user } = useAuth()
@@ -32,10 +32,9 @@ export default function SubscriptionManager() {
     try {
       await subscriptionService.delete(category)
       setSubscriptions(prev => prev.filter(c => c !== category))
-      toast.success(`Suscripción a "${category}" eliminada`, {
-        icon: '🗑️',
-        duration: 4000
-      })
+      notification(`Suscripción a "${category}" eliminada`, 
+        {icon:'🗑️',duration: 1000}
+      )
     } catch (err) {
       handleError(err)
     }
@@ -49,10 +48,7 @@ export default function SubscriptionManager() {
       ? `${categories.length} categorías agregadas`
       : `Suscripción a "${categories[0]}" activada`
     
-    toast.success(message, {
-      icon: '✅',
-      duration: 4000,
-    })
+    notification(message)
     } catch (err) {
       handleError(err)
     }
