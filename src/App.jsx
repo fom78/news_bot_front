@@ -1,11 +1,27 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import AuthForm from './components/AuthForm'
 import SubscriptionManager from './components/SubscriptionManager'
 import ProtectedRoute from './components/ProtectedRoute'
 import Toast from './components/Toaster'
+import LandingPublic from './components/LandingPublic'
+
 export default function App() {
-  const { user, pending } = useAuth()
+  const { user, pending, logout } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.user-menu')) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   if (pending) {
     return (
@@ -20,14 +36,44 @@ export default function App() {
       <Toast />
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-800">📰 Suscripciones</span>
+          <Link to="/" className="text-xl font-bold text-gray-800 hover:text-gray-900">
+            📰 Suscripciones
+          </Link>
+          
           {user && (
-            <button 
-              onClick={() => window.location.reload()}
-              className="text-blue-600 hover:text-blue-700"
-            >
-              {user.phone}
-            </button>
+            <div className="user-menu relative">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 focus:outline-none"
+              >
+                <span>{user.phone}</span>
+                <svg 
+                  className={`w-4 h-4 transition-transform ${isMenuOpen ? 'transform rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                  <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                    Conectado como: <span className="font-medium">{user.phone}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout()
+                      setIsMenuOpen(false)
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </nav>
@@ -37,9 +83,13 @@ export default function App() {
           <Route path="/login" element={user ? <Navigate to="/" /> : <AuthForm mode="login" />} />
           <Route path="/register" element={user ? <Navigate to="/" /> : <AuthForm mode="register" />} />
           <Route path="/" element={
-            <ProtectedRoute>
-              <SubscriptionManager />
-            </ProtectedRoute>
+            user ? (
+              <ProtectedRoute>
+                <SubscriptionManager />
+              </ProtectedRoute>
+            ) : (
+              <LandingPublic />
+            )
           } />
         </Routes>
       </main>
