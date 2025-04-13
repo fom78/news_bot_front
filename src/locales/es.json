@@ -1,0 +1,25 @@
+{
+    "app": {
+      "title": "Suscripciones Inteligentes a Noticias",
+      "poweredBy": "🚀 Potenciado por Global Commerce",
+      "chooseCategories": "Elige tus categorías favoritas",
+      "loading": "Cargando..."
+    },
+    "landing": {
+      "intro": "Al suscribirte recibirás tus noticias a través de nuestro bot conversacional inteligente, que te ofrecerá:",
+      "features": {
+        "0": "Resúmenes personalizados en tiempo real",
+        "1": "Alertas importantes prioritarias",
+        "2": "Interacción natural por voz o texto",
+        "3": "Soporte 24/7 integrado"
+      },
+      "knowTech": "Conoce nuestra tecnología",
+      "description": "Selecciona los temas de tu interés y recibe noticias relevantes mediante conversaciones inteligentes adaptadas a tus necesidades.",
+      "subscriptionAccess": "Acceso con suscripción"
+    },
+    "buttons": {
+      "startNow": "Comenzar ahora",
+      "access": "Acceso usuarios"
+    }
+  }
+  

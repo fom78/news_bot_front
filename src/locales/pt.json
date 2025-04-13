@@ -1,0 +1,24 @@
+{
+  "app": {
+    "title": "Assinaturas Inteligentes de Notícias",
+    "poweredBy": "🚀 Potencializado por Global Commerce",
+    "chooseCategories": "Escolha suas categorias favoritas",
+    "loading": "Carregando..."
+  },
+  "landing": {
+    "intro": "Ao assinar, você receberá suas notícias através do nosso bot de conversação inteligente, que oferece:",
+    "features": {
+      "0": "Resumos personalizados em tempo real",
+      "1": "Alertas importantes com prioridade",
+      "2": "Interação natural por voz ou texto",
+      "3": "Suporte integrado 24/7"
+    },
+    "knowTech": "Conheça nossa tecnologia",
+    "description": "Selecione os temas do seu interesse e receba notícias relevantes por meio de conversas inteligentes adaptadas às suas necessidades.",
+    "subscriptionAccess": "Acesso por assinatura"
+  },
+  "buttons": {
+    "startNow": "Começar agora",
+    "access": "Acesso usuários"
+  }
+}

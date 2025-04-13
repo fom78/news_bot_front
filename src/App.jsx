@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
-import { useTheme } from './context/ThemeContext'
+import { useTranslation } from 'react-i18next'
 import AuthForm from './components/AuthForm'
 import SubscriptionManager from './components/SubscriptionManager'
 import ProtectedRoute from './components/ProtectedRoute'
 import Toast from './components/Toaster'
 import LandingPublic from './components/LandingPublic'
 import ThemeToggle from './components/ThemeToggle'
+import LanguageSelector from './components/LanguageSelector'
 
 export default function App() {
   const { user, pending, logout } = useAuth()
-  const { darkMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { t } = useTranslation()
 
   // Cerrar menú al hacer clic fuera
   useEffect(() => {
@@ -43,10 +44,11 @@ export default function App() {
             to="/" 
             className="text-xl font-bold text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-gray-200"
           >
-            📰 Suscripciones
+            📰 {t('app.title')}
           </Link>
           
           <div className="flex items-center gap-4">
+            <LanguageSelector />
             <ThemeToggle />
             
             {user && (
@@ -69,7 +71,7 @@ export default function App() {
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 ring-1 ring-black dark:ring-gray-600 ring-opacity-5">
                     <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 border-b dark:border-gray-700">
-                      Conectado como: <span className="font-medium">{user.phone}</span>
+                      {t('app.connectedAs')}: <span className="font-medium">{user.phone}</span>
                     </div>
                     <button
                       onClick={() => {
@@ -78,7 +80,7 @@ export default function App() {
                       }}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
-                      Cerrar sesión
+                      {t('app.logout')}
                     </button>
                   </div>
                 )}
