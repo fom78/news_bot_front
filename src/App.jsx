@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import { useTheme } from './context/ThemeContext'
 import AuthForm from './components/AuthForm'
 import SubscriptionManager from './components/SubscriptionManager'
 import ProtectedRoute from './components/ProtectedRoute'
 import Toast from './components/Toaster'
 import LandingPublic from './components/LandingPublic'
+import ThemeToggle from './components/ThemeToggle'
 
 export default function App() {
   const { user, pending, logout } = useAuth()
+  const { darkMode } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   // Cerrar menú al hacer clic fuera
@@ -25,56 +28,63 @@ export default function App() {
 
   if (pending) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500 dark:border-blue-400"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Toast />
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-gray-800 hover:text-gray-900">
+          <Link 
+            to="/" 
+            className="text-xl font-bold text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-gray-200"
+          >
             📰 Suscripciones
           </Link>
           
-          {user && (
-            <div className="user-menu relative">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 focus:outline-none"
-              >
-                <span>{user.phone}</span>
-                <svg 
-                  className={`w-4 h-4 transition-transform ${isMenuOpen ? 'transform rotate-180' : ''}`}
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            
+            {user && (
+              <div className="user-menu relative">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 focus:outline-none"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
-                  <div className="px-4 py-2 text-sm text-gray-700 border-b">
-                    Conectado como: <span className="font-medium">{user.phone}</span>
-                  </div>
-                  <button
-                    onClick={() => {
-                      logout()
-                      setIsMenuOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  <span>{user.phone}</span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform ${isMenuOpen ? 'transform rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
                   >
-                    Cerrar sesión
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 ring-1 ring-black dark:ring-gray-600 ring-opacity-5">
+                    <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 border-b dark:border-gray-700">
+                      Conectado como: <span className="font-medium">{user.phone}</span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout()
+                        setIsMenuOpen(false)
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
