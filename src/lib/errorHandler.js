@@ -3,10 +3,13 @@ import toast from 'react-hot-toast'
 
 export const handleError = (error, options = {}) => {
   
+  console.log(error);
   
   const defaultMessage = 'Error en la operación'
   const message = error.response?.data?.error?.message  || error.message || defaultMessage
   
+
+
   if (!options.silent) {
     toast.error(message, {
       duration: options.duration || 5000,

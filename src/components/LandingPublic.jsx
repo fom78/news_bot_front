@@ -1,10 +1,34 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { subscriptionService } from '../services/api'
+import { handleError } from '../lib/errorHandler'
 
 export default function LandingPublic() {
-  const categories = [
-    'Tecnología', 'Deportes', 'Política', 
-    'Economía', 'Entretenimiento', 'Salud'
-  ]
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const loadCategories = async () => {
+    try {
+      const data = await subscriptionService.getCategories()
+      setCategories(data)
+    } catch (err) {
+      handleError(err, { id: 'public-categories', silent: true })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadCategories()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500 mx-auto"></div>
+      </div>
+    )
+  }
 
   return (
     <div className="text-center py-12">
@@ -22,7 +46,7 @@ export default function LandingPublic() {
             key={category}
             className="p-6 bg-white border rounded-lg shadow-sm cursor-not-allowed opacity-75"
           >
-            <div className="font-medium mb-2">{category}</div>
+            <div className="font-medium mb-2 capitalize">{category}</div>
             <div className="text-sm text-blue-600">Inicia sesión para acceder</div>
           </div>
         ))}

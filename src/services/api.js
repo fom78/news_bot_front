@@ -41,6 +41,10 @@ export const authService = {
 
 export const subscriptionService = {
   get: () => apiClient.get('/subscriptions').then(res => res.data.map(s => s.category)),
+  getCategories: () => apiClient.get('/subscriptions/categories').
+  then(res => {
+    // Añadir "Falsa" a la lista de categorías disponibles    
+    return [...res.data.categories, "Falsa"]}),
   add: (category) => apiClient.post('/subscriptions', { categories: category }),
   delete: (category) => apiClient.delete(`/subscriptions/${encodeURIComponent(category)}`)
 }
