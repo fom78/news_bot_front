@@ -3,8 +3,9 @@
       "title": "Suscripciones Inteligentes a Noticias",
       "poweredBy": "🚀 Potenciado por Global Commerce",
       "chooseCategories": "Elige tus categorías favoritas",
-      "loading": "Cargando..."
-    },
+      "loading": "Cargando...",
+      "logout": "Cerrar sesión"
+  },
     "landing": {
       "intro": "Al suscribirte recibirás tus noticias a través de nuestro bot conversacional inteligente, que te ofrecerá:",
       "features": {
@@ -12,7 +13,7 @@
         "1": "Alertas importantes prioritarias",
         "2": "Interacción natural por voz o texto",
         "3": "Soporte 24/7 integrado"
-      },
+  },
       "knowTech": "Conoce nuestra tecnología",
       "description": "Selecciona los temas de tu interés y recibe noticias relevantes mediante conversaciones inteligentes adaptadas a tus necesidades.",
       "subscriptionAccess": "Acceso con suscripción"
@@ -20,6 +21,42 @@
     "buttons": {
       "startNow": "Comenzar ahora",
       "access": "Acceso usuarios"
+  },
+  "subscriptionForm": {
+    "singleTitle": "Agregar una sola categoría",
+    "singlePlaceholder": "Selecciona una categoría",
+    "singleButton": "Suscribirme",
+    "multipleTitle": "Seleccionar múltiples categorías",
+    "multipleButton": "Suscribirme a {{count}} categoría(s)",
+    "notificationAdded": "Suscripción a \"{{category}}\" activada"
+  },
+  "subscriptionManager": {
+    "title": "Tus Suscripciones",
+    "description": "Gestiona las categorías de noticias que recibes",
+    "noSubscriptions": "No tienes suscripciones activas",
+    "deleteButton": "Eliminar",
+    "loading": "Cargando suscripciones...",
+    "loginMessage": "Debes iniciar sesión para ver tus suscripciones",
+    "notificationDeleted": "Suscripción a \"{{category}}\" eliminada",
+    "notificationSingleAdded": "Suscripción a \"{{category}}\" activada",
+    "notificationMultipleAdded": "{{count}} categorías agregadas"
+  },
+  "authForm": {
+    "titleLogin": "Iniciar Sesión",
+    "titleRegister": "Crear Cuenta",
+    "phoneLabel": "Teléfono Internacional",
+    "phoneExample": "Ej: +549112345678",
+    "passwordLabel": "Contraseña",
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Crear cuenta",
+    "processing": "Procesando...",
+    "noAccount": "¿No tienes cuenta?",
+    "registerLink": "Regístrate",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "loginLink": "Inicia sesión",
+    "errors": {
+      "invalidPhone": "Formato inválido. Ejemplo: +549112345678",
+      "shortPassword": "La contraseña debe tener al menos 8 caracteres"
     }
   }
-  
+}

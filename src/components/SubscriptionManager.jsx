@@ -1,5 +1,6 @@
 // src/components/SubscriptionManager.jsx
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { subscriptionService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import SubscriptionForm from './SubscriptionForm'
@@ -7,6 +8,7 @@ import { handleError } from '../lib/errorHandler'
 import { notification } from '../lib/notificationHandler'
 
 export default function SubscriptionManager() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const [subscriptions, setSubscriptions] = useState([])
   const [availableCategories, setAvailableCategories] = useState([])
@@ -31,7 +33,7 @@ export default function SubscriptionManager() {
     try {
       await subscriptionService.delete(category)
       setSubscriptions(prev => prev.filter(c => c !== category))
-      notification(`Suscripción a "${category}" eliminada`, {
+      notification(t('subscriptionManager.notificationDeleted', { category }), {
         icon: '🗑️',
         duration: 3000
       })
@@ -44,11 +46,9 @@ export default function SubscriptionManager() {
     try {
       await subscriptionService.add(categories)
       setSubscriptions(prev => [...new Set([...prev, ...categories])])
-      
-      const message = categories.length > 1 
-        ? `${categories.length} categorías agregadas`
-        : `Suscripción a "${categories[0]}" activada`
-      
+      const message = categories.length > 1
+        ? t('subscriptionManager.notificationMultipleAdded', { count: categories.length })
+        : t('subscriptionManager.notificationSingleAdded', { category: categories[0] })
       notification(message, {
         icon: '✅',
         duration: 2000
@@ -65,7 +65,7 @@ export default function SubscriptionManager() {
   if (!user) {
     return (
       <div className="text-center py-12 text-gray-600 dark:text-gray-400">
-        Debes iniciar sesión para ver tus suscripciones
+        {t('subscriptionManager.loginMessage')}
       </div>
     )
   }
@@ -73,7 +73,7 @@ export default function SubscriptionManager() {
   if (loading) {
     return (
       <div className="text-center py-12 text-gray-800 dark:text-gray-200">
-        Cargando suscripciones...
+        {t('subscriptionManager.loading')}
       </div>
     )
   }
@@ -81,16 +81,18 @@ export default function SubscriptionManager() {
   return (
     <div className="space-y-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
       <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Tus Suscripciones</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+          {t('subscriptionManager.title')}
+        </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Gestiona las categorías de noticias que recibes
+          {t('subscriptionManager.description')}
         </p>
       </div>
 
       {subscriptions.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <p className="text-gray-500 dark:text-gray-400">
-            No tienes suscripciones activas
+            {t('subscriptionManager.noSubscriptions')}
           </p>
         </div>
       ) : (
@@ -107,15 +109,15 @@ export default function SubscriptionManager() {
                 onClick={() => handleDelete(category)}
                 className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-3 py-1 rounded-md hover:bg-red-50 dark:hover:bg-red-700 transition-colors duration-150"
               >
-                Eliminar
+                {t('subscriptionManager.deleteButton')}
               </button>
             </div>
           ))}
         </div>
       )}
 
-      <SubscriptionForm 
-        availableCategories={availableCategories.filter(c => !subscriptions.includes(c))} 
+      <SubscriptionForm
+        availableCategories={availableCategories.filter(c => !subscriptions.includes(c))}
         onAdd={handleAdd}
       />
     </div>

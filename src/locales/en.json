@@ -1,24 +1,62 @@
 {
   "app": {
-    "title": "Smart News Subscriptions",
+    "title": "Intelligent News Subscriptions",
     "poweredBy": "🚀 Powered by Global Commerce",
     "chooseCategories": "Choose your favorite categories",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "logout": "Log Out"
   },
   "landing": {
-    "intro": "By subscribing, you'll receive your news through our smart conversational bot, which offers you:",
+    "intro": "By subscribing, you'll receive news through our intelligent conversational bot, offering you:",
     "features": {
-      "0": "Real-time personalized summaries",
+      "0": "Personalized real-time summaries",
       "1": "Priority important alerts",
-      "2": "Natural voice or text interaction",
+      "2": "Natural interaction via voice or text",
       "3": "Integrated 24/7 support"
     },
     "knowTech": "Learn about our technology",
     "description": "Select the topics you're interested in and receive relevant news through intelligent conversations tailored to your needs.",
-    "subscriptionAccess": "Subscription access"
+    "subscriptionAccess": "Subscription Access"
   },
   "buttons": {
-    "startNow": "Start now",
-    "access": "User access"
+    "startNow": "Start Now",
+    "access": "User Access"
+  },
+  "subscriptionForm": {
+    "singleTitle": "Add a single category",
+    "singlePlaceholder": "Select a category",
+    "singleButton": "Subscribe",
+    "multipleTitle": "Select multiple categories",
+    "multipleButton": "Subscribe to {{count}} category(ies)",
+    "notificationAdded": "Subscription to \"{{category}}\" activated"
+  },
+  "subscriptionManager": {
+    "title": "Your Subscriptions",
+    "description": "Manage the categories of news you receive",
+    "noSubscriptions": "You don't have any active subscriptions",
+    "deleteButton": "Remove",
+    "loading": "Loading subscriptions...",
+    "loginMessage": "You must log in to view your subscriptions",
+    "notificationDeleted": "Subscription to \"{{category}}\" removed",
+    "notificationSingleAdded": "Subscription to \"{{category}}\" activated",
+    "notificationMultipleAdded": "{{count}} categories added"
+  },
+  "authForm": {
+    "titleLogin": "Log In",
+    "titleRegister": "Create Account",
+    "phoneLabel": "International Phone",
+    "phoneExample": "Ex: +549112345678",
+    "passwordLabel": "Password",
+    "loginButton": "Log In",
+    "registerButton": "Create Account",
+    "processing": "Processing...",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Sign Up",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Log In",
+    "errors": {
+      "invalidPhone": "Invalid format. Example: +549112345678",
+      "shortPassword": "Password must be at least 8 characters"
+    }
   }
 }

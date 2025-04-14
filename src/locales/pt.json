@@ -1,12 +1,13 @@
 {
   "app": {
     "title": "Assinaturas Inteligentes de Notícias",
-    "poweredBy": "🚀 Potencializado por Global Commerce",
+    "poweredBy": "🚀 Impulsionado por Global Commerce",
     "chooseCategories": "Escolha suas categorias favoritas",
-    "loading": "Carregando..."
+    "loading": "Carregando...",
+    "logout": "Sair"
   },
   "landing": {
-    "intro": "Ao assinar, você receberá suas notícias através do nosso bot de conversação inteligente, que oferece:",
+    "intro": "Ao se inscrever, você receberá notícias por meio do nosso bot conversacional inteligente, que oferece:",
     "features": {
       "0": "Resumos personalizados em tempo real",
       "1": "Alertas importantes com prioridade",
@@ -14,11 +15,48 @@
       "3": "Suporte integrado 24/7"
     },
     "knowTech": "Conheça nossa tecnologia",
-    "description": "Selecione os temas do seu interesse e receba notícias relevantes por meio de conversas inteligentes adaptadas às suas necessidades.",
+    "description": "Selecione os temas do seu interesse e receba notícias relevantes através de conversas inteligentes adaptadas às suas necessidades.",
     "subscriptionAccess": "Acesso por assinatura"
   },
   "buttons": {
     "startNow": "Começar agora",
-    "access": "Acesso usuários"
+    "access": "Acesso de usuários"
+  },
+  "subscriptionForm": {
+    "singleTitle": "Adicionar uma única categoria",
+    "singlePlaceholder": "Selecione uma categoria",
+    "singleButton": "Assinar",
+    "multipleTitle": "Selecionar múltiplas categorias",
+    "multipleButton": "Assinar {{count}} categoria(s)",
+    "notificationAdded": "Assinatura para \"{{category}}\" ativada"
+  },
+  "subscriptionManager": {
+    "title": "Suas Assinaturas",
+    "description": "Gerencie as categorias de notícias que você recebe",
+    "noSubscriptions": "Você não tem assinaturas ativas",
+    "deleteButton": "Remover",
+    "loading": "Carregando assinaturas...",
+    "loginMessage": "Você precisa estar logado para ver suas assinaturas",
+    "notificationDeleted": "Assinatura para \"{{category}}\" removida",
+    "notificationSingleAdded": "Assinatura para \"{{category}}\" ativada",
+    "notificationMultipleAdded": "{{count}} categorias adicionadas"
+  },
+  "authForm": {
+    "titleLogin": "Entrar",
+    "titleRegister": "Criar Conta",
+    "phoneLabel": "Telefone Internacional",
+    "phoneExample": "Ex: +5511999999999",
+    "passwordLabel": "Senha",
+    "loginButton": "Entrar",
+    "registerButton": "Criar conta",
+    "processing": "Processando...",
+    "noAccount": "Não tem uma conta?",
+    "registerLink": "Cadastre-se",
+    "haveAccount": "Já tem uma conta?",
+    "loginLink": "Faça login",
+    "errors": {
+      "invalidPhone": "Formato inválido. Exemplo: +5511999999999",
+      "shortPassword": "A senha deve ter pelo menos 8 caracteres"
+    }
   }
 }
